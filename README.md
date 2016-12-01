@@ -2,7 +2,7 @@
 
 ## A Graphical User Interface (GUI) for Genomic Classifiers 
 
-**rabbitGUI** is a friendly user interface for the visual analysis of biomarkers in transcriptomic data with [Rabbit](https://github.com/jperezrogers/rabbit). The biomarker statistics are represented using density, Region Of Convergence (ROC) and box and whiskers plots. rabbitGUI is developed in **R**, and requires R to be installed.
+**rabbitGUI** is a friendly user interface for the visual analysis of biomarkers in transcriptomic data with [Rabbit](https://github.com/jperezrogers/rabbit). The biomarker statistics are represented using density, Area Under the Receiver Operator Curve (ROC AUC) and box and whiskers plots. rabbitGUI is developed in **R**, and requires R to be installed.
 
 To run rabbitGUI, first install the latest available version of the following R packages:
 
@@ -18,7 +18,7 @@ rabbitGUI consists of two main panels. The first panel (*Prediction Scores*) sho
 
 ![Prediction Scores](images/prediction_scores.png)
 
-*Prediction Scores* consists of two plots: the distribution of test samples per prediction score and the Region of Convergence (ROC) of the selected classification model.
+*Prediction Scores* consists of two plots: the distribution of test samples per prediction score and the Area Under the Receiver Operator Curve (ROC AUC) of the selected classification model.
 
 | Density plot | ROC plot |
 | ------------ | -------- |
