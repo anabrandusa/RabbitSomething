@@ -3,7 +3,7 @@
 library(markdown)
 
 step.names=c("gene filter" , "feature selection" , "biomarker size" , "classification" )
-step.labels=c("gene filter" , "feature selection" , "biomarker size" , "classifier" )
+step.labels=c("Feature filter" , "Feature ranking" , "Size selection" , "Classification" )
 names(step.names) = step.labels
 box.col = c("blue", "magenta", "orange", "brown", "green", "pink", "purple", "cyan", "yellow", "indigo")
 names(box.col)= step.names
@@ -22,7 +22,7 @@ source("meanAUC.R")
 ui=navbarPage("Rabbit",
 tabPanel("Prediction Scores",
 fluidRow(splitLayout(cellWidths = c("50%", "50%"),
-    sliderInput("selected.model.number", "Model combination:",
+    sliderInput("selected.model.number", "Model order:",
     min = 1, max = number.of.models, step = 1, value = 1
     ), selectInput("selected.model.header", label = h5("Model description"),
         choices = as.list(auc.headers[,"Headers"]),
@@ -35,10 +35,10 @@ fluidRow(splitLayout(cellWidths = c("70%", "30%"),
     )
   )
   ),
-  tabPanel("Model selection",
+  tabPanel("Model ranking",
     sidebarLayout(
       sidebarPanel(
-        radioButtons("step", "Select best option for each step",
+        radioButtons("step", "Select the best option for each step",
           step.labels
         )
       ),
