@@ -12,6 +12,6 @@ plotROCCurve = function(locale.input, input.all.data.table, input.auc.headers, i
     auc.performance = subset(input.auc.means, Model == selected.model.number)[, auc.order.criterion]
     auc.performance.numeric = as.numeric(as.character(auc.performance))
     auc.label = paste("ROC AUC:", toString(round(as.numeric(auc.performance.numeric), digits = 2)))
-    plot(roc.result, main = auc.label, cex.lab = cex.scale, cex.main = cex.scale)
+    plot(roc.result, main = auc.label, cex.lab = cex.scale, cex.main = cex.scale, lwd=2, col="black")
     #plot(roc.result, height = 500, width = 500, main = auc.label, cex.lab = cex.scale, cex.main = cex.scale)
 }

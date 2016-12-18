@@ -7,5 +7,5 @@ plotTestROCCurve = function(classification.scores.file, input.model.name) {
     roc.result = get.roc.result(auc.order.criterion, true.class.vector, score.vector, direction.is.zero)
     auc.performance = performance(prediction(score.vector, true.class.vector), "auc")@y.values[[1]]
     auc.label = paste("ROC AUC:", toString(round(as.numeric(auc.performance), digits = 2)))
-    plot(roc.result, main = auc.label, cex.lab = cex.scale, cex.main = cex.scale)
+    plot(roc.result, main = auc.label, cex.lab = cex.scale, cex.main = cex.scale, lwd=2, col="black")
 }
