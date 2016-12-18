@@ -1,6 +1,6 @@
 # rabbitGUI
 
-## A Graphical User Interface (GUI) for Genomic Classifiers 
+## A Graphical User Interface (GUI) to Visualize Genomic Classifiers 
 
 **rabbitGUI** is a friendly user interface for the visual analysis of biomarkers in transcriptomic data with [Rabbit](https://github.com/jperezrogers/rabbit). The biomarker statistics are represented using density, Area Under the Receiver Operator Curve (ROC AUC) and box and whiskers plots. rabbitGUI is developed in **R**, and requires R to be installed.
 
