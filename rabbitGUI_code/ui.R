@@ -19,45 +19,21 @@ source("ModelSelection.R")
 setwd(source.route)
 source("meanAUC.R")
 
-ui=navbarPage("rabbitGUI",
-tabPanel("Prediction Scores",
-fluidRow(splitLayout(cellWidths = c("50%", "50%"),
-    sliderInput("selected.model.number", "Models sorted by the the highest AUC",
-    min = 1, max = number.of.models, step = 1, value = 1
-    ), selectInput("selected.model.header", label = h5("Model description"),
-        choices = as.list(auc.headers[order(as.numeric(auc.headers[,"Model"])), "Headers"]),
-        width = 500,
-        selected = 1)
-)),
-h3("Real score"),
-fluidRow(splitLayout(cellWidths = c("70%", "30%"),
-    plotOutput("plotModelHistogram"),
-    plotOutput("ROCCurve")
-    )
-),
-h3("Random score"),
-  fluidRow(splitLayout(cellWidths = c("70%", "30%"),
-    plotOutput("plotModelHistogramRandom"),
-    plotOutput("ROCCurveRandom")))
-  ),
+ui = navbarPage("rabbitGUI",
   tabPanel("Model selection",
     sidebarLayout(
       sidebarPanel(
-        radioButtons("step", "Select the best option for each step",
-          step.labels
-        )
-      ),
+        radioButtons("step", "Visualize the best option for each step",
+          step.labels)),
       mainPanel(
         #h3("Mean AUC"),
         plotOutput("medianAuc"),
         h4("TukeyHSD comparison"),
          DT::dataTableOutput("tukeyValues"),
-        h4("Boxplot summary"),
-         DT::dataTableOutput("boxplotParameters")
-
-      )
-    )
-),
+         h4("Boxplot summary"),
+         DT::dataTableOutput("boxplotParameters"),
+                h4("Best combination of models"),
+                DT::dataTableOutput("displayBestModels")))),
 tabPanel("Random mean AUC",
     sidebarLayout(
       sidebarPanel(
@@ -69,15 +45,30 @@ tabPanel("Random mean AUC",
         h3("Random mean AUC"),
         plotOutput("medianAucRandom")
 ))),
+tabPanel("Prediction Scores",
+fluidRow(splitLayout(cellWidths = c("50%", "50%"),
+    sliderInput("selected.model.number", "Models sorted by the the highest AUC",
+    min = 1, max = number.of.models, step = 1, value = 1), selectInput("selected.model.header", label = h5("Model description"),
+        choices = as.list(auc.headers[order(as.numeric(auc.headers[, "Model"])), "Headers"]),
+        width = 500,
+        selected = 1))),
+h3("Real score"),
+fluidRow(splitLayout(cellWidths = c("70%", "30%"),
+    plotOutput("plotModelHistogram"),
+    plotOutput("ROCCurve"))),
+h3("Random score"),
+  fluidRow(splitLayout(cellWidths = c("70%", "30%"),
+    plotOutput("plotModelHistogramRandom"),
+    plotOutput("ROCCurveRandom")))),
 tabPanel("View biomarker",
     sidebarLayout(
       sidebarPanel(
-              fileInput("pheno1", "Expression Phenotype 1 File (Green)",
+              fileInput("pheno", "Expression Phenotype File",
               accept = c(
               "text/csv",
               "text/comma-separated-values,text/plain",
               ".csv")),
-              fileInput("pheno2", "Expression Phenotype 2 File (Orange)",
+              fileInput("sampleClass", "Sample Class File",
               accept = c(
               "text/csv",
               "text/comma-separated-values,text/plain",
@@ -101,12 +92,12 @@ fluidRow(splitLayout(cellWidths = c("20%", "40%", "20%"),
 tabPanel("Heatmap",
     sidebarLayout(
       sidebarPanel(
-              fileInput("phenoFull1", "Expression Phenotype 1 File (Green)",
+              fileInput("phenoFull", "Expression Phenotype File",
               accept = c(
               "text/csv",
               "text/comma-separated-values,text/plain",
               ".csv")),
-              fileInput("phenoFull2", "Expression Phenotype 2 File (Orange)",
+              fileInput("sampleClassFull", "Sample Class File",
               accept = c(
               "text/csv",
               "text/comma-separated-values,text/plain",

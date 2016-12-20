@@ -13,75 +13,18 @@ return(tukey.elements[[1]][2])
     }
 }
 
-plotMedianAUC = function(selected.step, input.all.data.table, input.auc.means, select.best.models=T) {
-    models.for.step = selected.models(selected.step)
-    auc.for.subsets = list()
-    auc.for.subsets.index = 1
-    for (model.subset in models.for.step) {
-        auc.for.subsets.for.model = c()
-        model.indexes = as.numeric(gsub("model_", "", model.subset))
-        for (model.name in model.indexes) {
-            model.subset = subset(input.auc.means, Model == model.name)
-            model.auc.values = model.subset[, auc.order.criterion]
-            auc.for.subsets.for.model = c(auc.for.subsets.for.model, model.auc.values)
-            #selected.subtable = subset(all.data.table, ModNames == model.name)
-            #auc.for.subsets.for.model = c(auc.for.subsets.for.model, get.mean.auc.values(model.name, selected.subtable))
-        }
-        auc.for.subsets.for.model.filtered = auc.for.subsets.for.model[!is.null(auc.for.subsets.for.model)]
-        auc.for.subsets[auc.for.subsets.index] = list(auc.for.subsets.for.model.filtered)
-        auc.for.subsets.index = auc.for.subsets.index + 1
-    }
-
-    names(models.for.step)[which(grepl("size", names(models.for.step)) == TRUE)] <- substr(names(models.for.step)[which(grepl("size", names(models.for.step)) == TRUE)], 17, nchar(names(models.for.step)[which(grepl("size", names(models.for.step)) == TRUE)]) - 1)
-    auc.for.subsets.as.matrix = matrix(ncol = 2, nrow = 0)
-    colnames(auc.for.subsets.as.matrix) = c("AUC", "Class")
-    for (auc.element in 1:length(auc.for.subsets)) {
-        auc.values = auc.for.subsets[[auc.element]]
-        auc.values = auc.values[!is.na(auc.values)]
-        auc.label = rep(auc.element, times = length(auc.values))
-        auc.for.subsets.as.matrix = rbind(auc.for.subsets.as.matrix, cbind(auc.values, auc.label))
-    }
-    auc.data.frame = as.data.frame(auc.for.subsets.as.matrix)
-    auc.data.frame[, "Class"] = as.factor(auc.data.frame[, "Class"])
-    class.names = unique(auc.data.frame[, "Class"])
-    if (select.best.models){
-    anova.results = aov(AUC ~ Class, data = auc.data.frame)
-    anova.p.value = summary(anova.results)[[1]][["Pr(>F)"]][1]
-    tukey.table = TukeyHSD(anova.results, "Class")$Class
-    filtered.tukey.table = tukey.table
-    updated.tukey.row.names = sapply(rownames(tukey.table),
-        function(x) {
-            new.difference.label = gsub("\\-", " -- ", x)
-            for (class.name in class.names) {
-                label.class.name = paste("(", names(models.for.step)[as.numeric(class.name)], ")", sep = "")
-                new.difference.label = gsub(paste("^", toString(class.name), sep = ""), label.class.name, new.difference.label)
-                new.difference.label = gsub(paste(toString(class.name), "$", sep = ""), label.class.name, new.difference.label)
-            }
-            new.difference.label
-        })
-    rownames(filtered.tukey.table) = updated.tukey.row.names
-    assign("filtered.tukey.table", filtered.tukey.table, envir = .GlobalEnv)
-    significative.tukey.entries = tukey.table[, "p adj"] < 0.05
-    significative.tukey.table = tukey.table[significative.tukey.entries,]
-    tukey.empty.values = c()
-    if (length(which(significative.tukey.entries)) == 1) {
-        names(significative.tukey.table) = colnames(tukey.table)
-        tukey.name = rownames(tukey.table)[significative.tukey.entries]
-        tukey.empty.values = getTukeyBadModelNames(significative.tukey.table, tukey.name)
-    } else {
-            if (nrow(significative.tukey.table) > 0) {
-                for (tukey.index in 1:nrow(significative.tukey.table)) {
-                    tukey.empty.values = c(tukey.empty.values, getTukeyBadModelNames(significative.tukey.table[tukey.index,], rownames(significative.tukey.table)[tukey.index]))
-                }
-            }
-        }
-    large.classes = setdiff(class.names, tukey.empty.values)
-    }
+plotMedianAUC = function(selected.step, input.auc.means, select.best.models=T) {
+    auc.classification = getAUCClassification(selected.step, input.auc.means, select.best.models)
+    auc.for.subsets = auc.classification$auc.for.subsets
+    large.classes = auc.classification$large.classes
+    models.for.step = auc.classification$models.for.step
+    class.names = auc.classification$class.names
     locale.box.col = rep("blue", times = length(class.names))
     boxplot.header = "Cross validation mean AUC"
     if (select.best.models) {
         locale.box.col[sapply(large.classes, as.numeric)] = "red"
-        boxplot.header = paste(boxplot.header, "\nAnova p - value:", toString(round(anova.p.value, digits = 5)))
+        boxplot.header = paste(boxplot.header, "\nAnova p - value:", toString(round(auc.classification$anova.p.value, digits = 5)))
+        class.names = auc.classification$class.names
     } else {
         locale.box.col = rep("yellow", times = length(class.names))
     }
@@ -101,6 +44,6 @@ plotMedianAUC = function(selected.step, input.all.data.table, input.auc.means, s
 
     boxplotContainer
     if (select.best.models) {
-        legend("bottomright", legend = c("Best models", "Models to exclude"), col = c("red", "blue"), cex = 1, pch = 15)
+        legend("bottomright", legend = c("Best models", "Other models"), col = c("red", "blue"), cex = 1, pch = 15)
     }
 }

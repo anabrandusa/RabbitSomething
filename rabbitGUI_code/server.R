@@ -2,7 +2,7 @@
 #setwd(data.route)
 #all.data.table = read.csv("alldata.csv", header = T, stringsAsFactors = F)
 #auc.table = read.csv("aucdata.csv", header = T, stringsAsFactors = F)
-options(shiny.maxRequestSize=100*1024^2)
+options(shiny.maxRequestSize = 100 * 1024 ^ 2)
 setwd(source.route)
 source("aucModelSelection.R")
 source("PlotMedianAUC.R")
@@ -11,36 +11,43 @@ source("PlotROCCurve.R")
 source("PlotHeatmap.R")
 source("PlotTestROCCurve.R")
 source("GetRocResult.R")
+source("GetAUCClassification.R")
+source("DisplayBestModelsTable.R")
 cex.scale = 1.5
-plot.line.width=2
+plot.line.width = 2
+displayed.digits=3
 selected.model.header = selected.model.number = selected.model.auc.header = selected.model.header.random = selected.model.auc.header.random = F
 server = function(input, output, session) {
     output$medianAuc <- renderPlot({
         selected.step = step.names[input$step];
-        plotMedianAUC(selected.step, all.data.table, auc.means)
+        plotMedianAUC(selected.step, auc.means)
     })
     output$medianAucComparison <- renderPlot({
     selected.step = step.names[input$stepComparison];
-    plotMedianAUC(selected.step, all.data.table, auc.means)
+    plotMedianAUC(selected.step, auc.means)
     })
     output$medianAucRandom <- renderPlot({
     selected.step = step.names[input$stepComparison];
-    plotMedianAUC(selected.step, all.data.random.table, random.auc.means, F)
+    plotMedianAUC(selected.step, random.auc.means, F)
     })
     output$boxplotParameters <- DT::renderDataTable({
         input$step
-        DT::datatable(round(aucSubsetInfo, digits = 3))
+        DT::datatable(round(aucSubsetInfo, digits = displayed.digits))
     })
     output$tukeyValues <- DT::renderDataTable({
         input$step
         locale.tukey.table = filtered.tukey.table
         locale.tukey.table = locale.tukey.table[, c("diff", "p adj")]
-        colnames(locale.tukey.table) = c("difference in means", "p-value")
-        DT::datatable(round(locale.tukey.table, digits = 3))
+        colnames(locale.tukey.table) = c("difference in means", "adjusted p-value")
+        DT::datatable(round(locale.tukey.table, digits = displayed.digits))
     })
-    output$distPlot <- renderPlot({
-        hist(rnorm(input$obs))
-    })
+    #output$bestModels <- DT::renderDataTable({
+    #input$step
+    #locale.tukey.table = filtered.tukey.table
+    #locale.tukey.table = locale.tukey.table[, c("diff", "p adj")]
+    #colnames(locale.tukey.table) = c("difference in means", "p-value")
+    #DT::datatable(round(locale.tukey.table, digits = displayed.digits))
+    #})
     output$plotModelHistogram <- renderPlot({
     locale.input = input;
     plotModelHistogram(locale.input, all.data.table, auc.headers, auc.means, "selected.model.header")
@@ -57,12 +64,12 @@ server = function(input, output, session) {
     locale.input = input
     plotROCCurve(locale.input, all.data.random.table, random.auc.headers, random.auc.means, "selected.model.auc.header.random")
     output$modelHeatmap = renderPlot({
-                pheno.file.1 = input$pheno1
-                pheno.file.2 = input$pheno2
+                pheno.file = input$pheno
+                sample.class.file = input$sampleClass
                 classification.scores.file = input$classifScores
                 feature.list.file = input$featureList
-                if (!is.null(pheno.file.1) && !is.null(pheno.file.2) && !is.null(classification.scores.file) && !is.null(feature.list.file)) {
-                    plotHeatmap(pheno.file.1, pheno.file.2, classification.scores.file, feature.list.file)
+                if (!is.null(pheno.file) && !is.null(sample.class.file) && !is.null(classification.scores.file) && !is.null(feature.list.file)) {
+                plotHeatmap(pheno.file, sample.class.file, classification.scores.file, feature.list.file)
                 }
                 })
             output$modelROCCurve = renderPlot({
@@ -77,12 +84,17 @@ server = function(input, output, session) {
             })
 })
     output$modelHeatmapFull = renderPlot({ 
-                                          pheno.file.1 = input$phenoFull1
-                                          pheno.file.2 = input$phenoFull2
-                                          if (!is.null(pheno.file.1) && !is.null(pheno.file.2)) {
-                                             plotHeatmap(pheno.file.1, pheno.file.2)
+                                          pheno.file = input$phenoFull
+                                          sample.class.file = input$sampleClassFull
+                                          if (!is.null(pheno.file) && !is.null(sample.class.file)) {
+                                          plotHeatmap(pheno.file, sample.class.file)
                                           }
-                                         })
+                                          })
+    output$displayBestModels = DT::renderDataTable({
+        DT::datatable(displayBestModelsTable(), options = list(
+        order = list(list(5, 'desc'))))
+        
+    })
 
 #output$summary <- renderPrint({
 #summary(cars)
