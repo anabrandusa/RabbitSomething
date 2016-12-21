@@ -18,7 +18,7 @@ source("ModelSelection.R")
 
 setwd(source.route)
 source("meanAUC.R")
-
+source("calculateModelHeaders.R")
 ui = navbarPage("rabbitGUI",
   tabPanel("Model selection",
     sidebarLayout(
@@ -49,7 +49,7 @@ tabPanel("Prediction Scores",
 fluidRow(splitLayout(cellWidths = c("50%", "50%"),
     sliderInput("selected.model.number", "Models sorted by the the highest AUC",
     min = 1, max = number.of.models, step = 1, value = 1), selectInput("selected.model.header", label = h5("Model description"),
-        choices = as.list(auc.headers[order(as.numeric(auc.headers[, "Model"])), "Headers"]),
+        choices = as.list(header.descriptions.body),
         width = 500,
         selected = 1))),
 h3("Real score"),

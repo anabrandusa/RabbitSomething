@@ -8,7 +8,9 @@ select.auc.model = function(locale.input, fetched.variable, input.auc.headers=au
     if (select.with.number) {
         selected.model.number = preliminary.selected.model.number
     } else {
-        selected.model.number = input.auc.means[which(input.auc.headers[, "Headers"] == preliminary.selected.model.header), "Model"]
+    
+        selected.model.number = input.auc.headers[which(input.auc.headers[, "Headers"] == preliminary.selected.model.header), "Model"]
+        #message("Selected with header: ", toString(selected.model.number))
     }
     assign("selected.model.number", preliminary.selected.model.number, envir = .GlobalEnv)
     assign(fetched.variable, preliminary.selected.model.header, envir = .GlobalEnv)
