@@ -15,7 +15,8 @@ source("GetAUCClassification.R")
 source("DisplayBestModelsTable.R")
 cex.scale = 1.5
 plot.line.width = 2
-displayed.digits=3
+displayed.digits = 3
+first.selection = T
 selected.model.header = selected.model.number = selected.model.auc.header = selected.model.header.random = selected.model.auc.header.random = F
 server = function(input, output, session) {
     output$medianAuc <- renderPlot({

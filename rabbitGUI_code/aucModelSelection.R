@@ -2,15 +2,14 @@ select.auc.model = function(locale.input, fetched.variable, input.auc.headers=au
     preliminary.selected.model.number = input.auc.means[locale.input$selected.model.number, "Model"]
     preliminary.selected.model.header = locale.input$selected.model.header
     select.with.number = T
-    if (preliminary.selected.model.header != get(fetched.variable)) {
+    if ((!first.selection) && (preliminary.selected.model.header != get(fetched.variable))) {    
         select.with.number = F
     }
+    assign("first.selection", F, envir = .GlobalEnv)
     if (select.with.number) {
         selected.model.number = preliminary.selected.model.number
     } else {
-    
         selected.model.number = input.auc.headers[which(input.auc.headers[, "Headers"] == preliminary.selected.model.header), "Model"]
-        #message("Selected with header: ", toString(selected.model.number))
     }
     assign("selected.model.number", preliminary.selected.model.number, envir = .GlobalEnv)
     assign(fetched.variable, preliminary.selected.model.header, envir = .GlobalEnv)
