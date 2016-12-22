@@ -60,7 +60,24 @@ h3("Random score"),
   fluidRow(splitLayout(cellWidths = c("70%", "30%"),
     plotOutput("plotModelHistogramRandom"),
     plotOutput("ROCCurveRandom")))),
-tabPanel("View biomarker",
+tabPanel("View biomarker: training",
+    sidebarLayout(
+      sidebarPanel(
+              fileInput("phenoFull", "Expression Phenotype File",
+              accept = c(
+              "text/csv",
+              "text/comma-separated-values,text/plain",
+              ".csv")),
+              fileInput("sampleClassFull", "Sample Class File",
+              accept = c(
+              "text/csv",
+              "text/comma-separated-values,text/plain",
+".csv")), fileInput("featureListFull", "Feature List",
+              accept = c(
+              "text/txt",
+              ".txt"))), mainPanel(
+        plotOutput("modelHeatmapFull", height = "600px")))),
+tabPanel("View biomarker: test",
     sidebarLayout(
       sidebarPanel(
               fileInput("pheno", "Expression Phenotype File",
@@ -89,20 +106,6 @@ fluidRow(splitLayout(cellWidths = c("20%", "40%", "20%"),
     plotOutput("Padding2")
     )))
 )),
-tabPanel("Heatmap",
-    sidebarLayout(
-      sidebarPanel(
-              fileInput("phenoFull", "Expression Phenotype File",
-              accept = c(
-              "text/csv",
-              "text/comma-separated-values,text/plain",
-              ".csv")),
-              fileInput("sampleClassFull", "Sample Class File",
-              accept = c(
-              "text/csv",
-              "text/comma-separated-values,text/plain",
-              ".csv"))), mainPanel(
-        plotOutput("modelHeatmapFull", height = "600px")))),
 #tabPanel("Biomarker Heatmap",
     #sidebarLayout(
       #sidebarPanel(

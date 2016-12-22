@@ -5,7 +5,7 @@ removeFirstColumns = function(input.file) {
     as.matrix(buffer.file[, 2:ncol(buffer.file)])
 }
 
-plotHeatmap = function(pheno.file, sample.class.file, classification.scores.file=NULL, feature.list=NULL) {
+plotHeatmap = function(pheno.file, sample.class.file, feature.list = NULL, classification.scores.file = NULL) {
     file.route = pheno.file$datapath
     sample.class.route = sample.class.file$datapath
     pheno.table = removeFirstColumns(file.route)

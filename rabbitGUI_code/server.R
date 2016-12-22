@@ -70,7 +70,7 @@ server = function(input, output, session) {
                 classification.scores.file = input$classifScores
                 feature.list.file = input$featureList
                 if (!is.null(pheno.file) && !is.null(sample.class.file) && !is.null(classification.scores.file) && !is.null(feature.list.file)) {
-                plotHeatmap(pheno.file, sample.class.file, classification.scores.file, feature.list.file)
+                plotHeatmap(pheno.file, sample.class.file, feature.list.file, classification.scores.file)
                 }
                 })
             output$modelROCCurve = renderPlot({
@@ -87,8 +87,9 @@ server = function(input, output, session) {
     output$modelHeatmapFull = renderPlot({ 
                                           pheno.file = input$phenoFull
                                           sample.class.file = input$sampleClassFull
-                                          if (!is.null(pheno.file) && !is.null(sample.class.file)) {
-                                          plotHeatmap(pheno.file, sample.class.file)
+                                          feature.list.file = input$featureListFull
+                                          if (!is.null(pheno.file) && !is.null(sample.class.file) && !is.null(feature.list.file)) {
+                                          plotHeatmap(pheno.file, sample.class.file, feature.list.file)
                                           }
                                           })
     output$displayBestModels = DT::renderDataTable({
