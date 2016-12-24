@@ -45,7 +45,7 @@ tabPanel("Random mean AUC",
         h3("Random mean AUC"),
         plotOutput("medianAucRandom")
 ))),
-tabPanel("Prediction Scores",
+tabPanel("Prediction scores",
 fluidRow(splitLayout(cellWidths = c("50%", "50%"),
     sliderInput("selected.model.number", "Models sorted by the the highest AUC",
     min = 1, max = number.of.models, step = 1, value = 1), selectInput("selected.model.header", label = h5("Model description"),
