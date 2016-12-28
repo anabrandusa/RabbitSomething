@@ -63,8 +63,9 @@ server = function(input, output, session) {
         })
         output$ROCCurveRandom <- renderPlot({
     locale.input = input
-    plotROCCurve(locale.input, all.data.random.table, random.auc.headers, random.auc.means, "selected.model.auc.header.random")
-    output$modelHeatmap = renderPlot({
+    plotROCCurve(locale.input, all.data.random.table, random.auc.headers, random.auc.means, "selected.model.auc.header.random")})
+            output$modelHeatmap = renderPlot({
+
                 pheno.file = input$pheno
                 sample.class.file = input$sampleClass
                 classification.scores.file = input$classifScores
@@ -82,7 +83,6 @@ server = function(input, output, session) {
                     classification.scores.directory = classification.scores.directory[length(classification.scores.directory) - 1]
                     plotTestROCCurve(classification.scores.file, classification.scores.directory)
                 }
-            })
 })
     output$modelHeatmapFull = renderPlot({ 
                                           pheno.file = input$phenoFull

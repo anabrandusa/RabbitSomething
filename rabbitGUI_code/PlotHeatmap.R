@@ -6,24 +6,30 @@ removeFirstColumns = function(input.file) {
 }
 
 plotHeatmap = function(pheno.file, sample.class.file, feature.list = NULL, classification.scores.file = NULL) {
+
     file.route = pheno.file$datapath
     sample.class.route = sample.class.file$datapath
     pheno.table = removeFirstColumns(file.route)
     sample.class.table = removeFirstColumns(sample.class.route)
     pheno.table.1 = pheno.table[, sample.class.table == 0]
     pheno.table.2 = pheno.table[, sample.class.table == 1]
-    if (!is.null(classification.scores.file) && !is.null(feature.list)) {
+    if (!is.null(classification.scores.file)) {
         classification.file.route = classification.scores.file$datapath
-        feature.list.file.route = feature.list$datapath
         selected.samples = sapply(read.table(classification.file.route, header = T)[, "Sample"], as.character)
-        selected.features = read.table(feature.list.file.route, header = F)[, 1]
-        pheno.table.1 = pheno.table.1[rownames(pheno.table.1)[rownames(pheno.table.1) %in% selected.features], colnames(pheno.table.1)[colnames(pheno.table.1) %in% selected.samples]]
-        pheno.table.2 = pheno.table.2[rownames(pheno.table.2)[rownames(pheno.table.2) %in% selected.features], colnames(pheno.table.2)[colnames(pheno.table.2) %in% selected.samples]]
     } else {
-        row.intersection = intersect(rownames(pheno.table.1), rownames(pheno.table.2))
-        pheno.table.1 = pheno.table.1[row.intersection, ]
-        pheno.table.2 = pheno.table.2[row.intersection, ]
+        selected.samples = colnames(pheno.table)
     }
+    if (!is.null(feature.list)) {
+        feature.list.file.route = feature.list$datapath
+        selected.features = read.table(feature.list.file.route, header = F)[, 1]
+    } else {
+        selected.features = rownames(pheno.table)
+    }
+    selected.features = intersect(rownames(pheno.table.1), selected.features)
+    selected.features = intersect(rownames(pheno.table.2), selected.features)
+    selected.samples = intersect(colnames(pheno.table), selected.samples)
+    pheno.table.1 = pheno.table.1[selected.features, colnames(pheno.table.1)[colnames(pheno.table.1) %in% selected.samples]]
+    pheno.table.2 = pheno.table.2[selected.features, colnames(pheno.table.2)[colnames(pheno.table.2) %in% selected.samples]]
     heatmap.scale <- colorRampPalette(c("blue", "white", "red"))
     heatmap.colors = c(rep("green", ncol(pheno.table.1)), rep("orange", ncol(pheno.table.2)))
     combined.table = cbind(pheno.table.1, pheno.table.2)
