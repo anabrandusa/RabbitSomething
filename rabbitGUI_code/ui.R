@@ -24,10 +24,10 @@ ui = navbarPage("rabbitGUI",
     sidebarLayout(
       sidebarPanel(
         radioButtons("step", "Visualize the best option for each step",
-          step.labels)),
+          step.labels), width = 2),
       mainPanel(
         #h3("Mean AUC"),
-        plotOutput("medianAuc"),
+        plotOutput("medianAuc"),width = 10,
         h4("TukeyHSD comparison"),
          DT::dataTableOutput("tukeyValues"),
          h4("Boxplot summary"),
@@ -37,18 +37,19 @@ ui = navbarPage("rabbitGUI",
 tabPanel("Random mean AUC",
     sidebarLayout(
       sidebarPanel(
-        radioButtons("stepComparison", "Select the best option for each step",
-          step.labels)),
+        radioButtons("stepComparison", "Select each step",
+          step.labels), width = 2),
       mainPanel(
-        h3("Real mean AUC"),
-        plotOutput("medianAucComparison"),
-        h3("Random mean AUC"),
-        plotOutput("medianAucRandom")
+        plotOutput("medianAucComparison"), width = 10
+ #,
+        #h3("Random mean AUC"),
+        #plotOutput("medianAucRandom")
 ))),
-tabPanel("Prediction scores",
+tabPanel("Prediction Scores",
 fluidRow(splitLayout(cellWidths = c("50%", "50%"),
     sliderInput("selected.model.number", "Models sorted by the the highest AUC",
-    min = 1, max = number.of.models, step = 1, value = 1), selectInput("selected.model.header", label = h5("Model description"),
+    min = 1, max = number.of.models, step = 1, value = 1)
+, selectInput("selected.model.header", label = h5("Model description"),
         choices = as.list(header.descriptions.body),
         width = 500,
         selected = 1))),

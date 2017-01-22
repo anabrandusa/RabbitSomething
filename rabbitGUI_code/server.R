@@ -25,12 +25,12 @@ server = function(input, output, session) {
     })
     output$medianAucComparison <- renderPlot({
     selected.step = step.names[input$stepComparison];
-    plotMedianAUC(selected.step, auc.means)
+    plotMedianAUC(selected.step, auc.means, F, random.auc.means)
     })
-    output$medianAucRandom <- renderPlot({
-    selected.step = step.names[input$stepComparison];
-    plotMedianAUC(selected.step, random.auc.means, F)
-    })
+    #output$medianAucRandom <- renderPlot({
+    #selected.step = step.names[input$stepComparison];
+    #plotMedianAUC(selected.step, auc.means, F, random.auc.means)
+    #})
     output$boxplotParameters <- DT::renderDataTable({
         input$step
         DT::datatable(round(aucSubsetInfo, digits = displayed.digits))

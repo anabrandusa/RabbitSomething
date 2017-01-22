@@ -18,6 +18,14 @@ getAUCClassification = function(selected.step, input.auc.means, select.best.mode
         auc.for.subsets.index = auc.for.subsets.index + 1
     }
     names(models.for.step)[which(grepl("size", names(models.for.step)) == TRUE)] <- substr(names(models.for.step)[which(grepl("size", names(models.for.step)) == TRUE)], 17, nchar(names(models.for.step)[which(grepl("size", names(models.for.step)) == TRUE)]) - 1)
+    
+    names(models.for.step)[names(models.for.step) == "random forest"] <- "rf"
+    names(models.for.step)[names(models.for.step) == "weighted voting"] <- "wv"
+    names(models.for.step)[names(models.for.step) == "naive bayes"] <- "nb"
+    names(models.for.step)[names(models.for.step) == "elastic net"] <- "en"
+    names(models.for.step)[names(models.for.step) == "FC + P"] <- "fold-change"
+    names(models.for.step)[names(models.for.step) == "SAM"] <- "sam"
+    
     auc.for.subsets.as.matrix = matrix(ncol = 2, nrow = 0)
     colnames(auc.for.subsets.as.matrix) = c("AUC", "Class")
     for (auc.element in 1:length(auc.for.subsets)) {
