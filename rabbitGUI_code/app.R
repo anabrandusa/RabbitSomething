@@ -4,6 +4,7 @@
 #    shinyApp(ui, server)
 #}
 library(shiny)
+library(shinyjs)
 base.route = getwd()
 source("AppRoutes.R")
 setwd(base.route)

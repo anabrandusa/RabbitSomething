@@ -97,7 +97,8 @@ server = function(input, output, session) {
         order = list(list(5, 'desc'))))
         
     })
-
+    shinyjs::onclick("boxplotSummaryHeader",
+                      shinyjs::toggle(id = "boxplotSummary", anim = TRUE))
 #output$summary <- renderPrint({
 #summary(cars)
 #})

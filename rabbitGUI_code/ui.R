@@ -24,22 +24,24 @@ ui = navbarPage("rabbitGUI",
     sidebarLayout(
       sidebarPanel(
         radioButtons("step", "Visualize the best option for each step",
-          step.labels), width = 2),
+          step.labels)),
       mainPanel(
         #h3("Mean AUC"),
-        plotOutput("medianAuc"),width = 10,
+        plotOutput("medianAuc"),
+         tags$a(h4("Boxplot summary (click to display)"), id = "boxplotSummaryHeader"),
+        shinyjs::hidden(
+        div(DT::dataTableOutput("boxplotParameters"), id = "boxplotSummary")),
         h4("TukeyHSD comparison"),
-         DT::dataTableOutput("tukeyValues"),
-         h4("Boxplot summary"),
-         DT::dataTableOutput("boxplotParameters"),
+        div(DT::dataTableOutput("tukeyValues"), id = "tukeyValues"),
                 h4("Best combination of models"),
                 DT::dataTableOutput("displayBestModels")))),
 tabPanel("Random mean AUC",
     sidebarLayout(
       sidebarPanel(
-        radioButtons("stepComparison", "Select each step",
+        radioButtons("stepComparison", "Select the best option for each step",
           step.labels), width = 2),
       mainPanel(
+        h3("Real mean AUC"),
         plotOutput("medianAucComparison"), width = 10
  #,
         #h3("Random mean AUC"),
@@ -196,7 +198,7 @@ fluidRow(splitLayout(cellWidths = c("20%", "40%", "20%"),
 #   )
         )
       )
-    )
+    ), shinyjs::useShinyjs()
   )
 
 
