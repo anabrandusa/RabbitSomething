@@ -17,6 +17,7 @@ displayBestModelsTable = function() {
         } else {
             best.models.selected = intersect(best.models.selected, locale.best.models)
         }
+        
     }
     best.models.selected = sort(best.models.selected)
     headers.by.model = auc.headers[auc.headers[, "Model"] %in% best.models.selected, c("Model", "Headers")]

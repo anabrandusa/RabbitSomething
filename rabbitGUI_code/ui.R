@@ -55,8 +55,7 @@ fluidRow(splitLayout(cellWidths = c("50%", "50%"),
         choices = as.list(header.descriptions.body),
         width = 700,
         selected = 1))
-    )
-,
+    ),
 h3("Real score"),
 fluidRow(splitLayout(cellWidths = c("70%", "30%"),
     plotOutput("plotModelHistogram"),
