@@ -12,6 +12,7 @@ To run rabbitGUI, first install the latest available version of the following R 
 * ROCR
 * markdown
 * gplots
+* shinyjs
 
 Then, execute the file *runRabbit.bat*.
 
