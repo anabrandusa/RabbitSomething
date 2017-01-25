@@ -17,8 +17,6 @@ displayBestModelsTable = function() {
         } else {
             best.models.selected = intersect(best.models.selected, locale.best.models)
         }
-
-
     }
     best.models.selected = sort(best.models.selected)
     headers.by.model = auc.headers[auc.headers[, "Model"] %in% best.models.selected, c("Model", "Headers")]
@@ -31,6 +29,6 @@ displayBestModelsTable = function() {
     auc.by.model = auc.means[auc.means[, "Model"] %in% best.models.selected, c("Model", auc.order.criterion)]
     auc.by.model = auc.by.model[order(auc.by.model[, "Model"]), auc.order.criterion]
     best.model.headers.matrix = cbind(sprintf("%3i", best.models.selected), best.model.headers.matrix, round(auc.by.model, digits = displayed.digits))
-    colnames(best.model.headers.matrix) = c("Model", step.labels, "Mean AUC")
+    colnames(best.model.headers.matrix) = c("Model index", step.labels, "Mean AUC")
     best.model.headers.matrix
 }

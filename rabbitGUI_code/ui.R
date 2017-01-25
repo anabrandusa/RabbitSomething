@@ -50,11 +50,13 @@ tabPanel("Random mean AUC",
 tabPanel("Prediction Scores",
 fluidRow(splitLayout(cellWidths = c("50%", "50%"),
     sliderInput("selected.model.number", "Models sorted by the the highest AUC",
-    min = 1, max = number.of.models, step = 1, value = 1)
-, selectInput("selected.model.header", label = h5("Model description"),
+    min = 1, max = number.of.models, step = 1, value = 1),
+    selectInput("selected.model.header", label = h5("Model description"),
         choices = as.list(header.descriptions.body),
-        width = 500,
-        selected = 1))),
+        width = 700,
+        selected = 1))
+    )
+,
 h3("Real score"),
 fluidRow(splitLayout(cellWidths = c("70%", "30%"),
     plotOutput("plotModelHistogram"),
