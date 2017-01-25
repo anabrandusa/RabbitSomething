@@ -1,8 +1,12 @@
 select.auc.model = function(locale.input, fetched.variable, input.auc.headers=auc.headers, input.auc.means=auc.means) {
-    preliminary.selected.model.number = input.auc.means[locale.input$selected.model.number, "Model"]
+    if("selected.model.number" %in% names(locale.input)){
+      preliminary.selected.model.number = input.auc.means[locale.input$selected.model.number, "Model"]
+    } else {
+      preliminary.selected.model.number = F
+    }
     preliminary.selected.model.header = locale.input$selected.model.header
     select.with.number = T
-    if ((!first.selection) && (preliminary.selected.model.header != get(fetched.variable))) {    
+    if (preliminary.selected.model.number==F || ((!first.selection) && (preliminary.selected.model.header != get(fetched.variable)))) {    
         select.with.number = F
     }
     assign("first.selection", F, envir = .GlobalEnv)
