@@ -14,7 +14,7 @@ To run rabbitGUI, first install the latest available version of the following R 
 * gplots
 * shinyjs
 
-Then, run app.R script on any system with R installed. In Windows, you can just execute the file *runRabbit.bat*.
+Then, run *app.R* script on any system with R installed. In Windows, you can just execute the file *runRabbit.bat*.
 
 rabbitGUI consists of two main panels. The first panel (*Prediction Scores*) shows the biomarker classification models sorted by Area Under the Curve (AUC) in descending order. These models can be selected by AUC order (*Model combination*) or by label (*Model description*).
 
